@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Colaboradores{% endblock %}
+
+{% block content %}
+<section class="content-card">
+    <h2>Ranking de Técnicos</h2>
+    <p>Selecione um período para filtrar os chamados vinculados a cada técnico.</p>
+
+    <form method="get" class="period-filter-form" style="margin-top: 20px;">
+        <div>
+            <label for="data_inicio">Data início</label>
+            <input type="date" name="data_inicio" id="data_inicio" value="{{ data_inicio }}">
+        </div>
+
+        <div>
+            <label for="data_fim">Data fim</label>
+            <input type="date" name="data_fim" id="data_fim" value="{{ data_fim }}">
+        </div>
+
+        <div>
+            <button type="submit">Filtrar</button>
+        </div>
+    </form>
+</section>
+
+<section class="content-card" style="margin-top: 24px;">
+    <div class="table-responsive">
+        <table class="performance-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Colaborador</th>
+                    <th>Total</th>
+                    <th>Atribuídos</th>
+                    <th>Pendentes</th>
+                    <th>Resolvidos</th>
+                    <th>Fechados</th>
+                    <th>Backlog</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in ranking %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ item.nome }}</td>
+                    <td>{{ item.total }}</td>
+                    <td>{{ item.atribuidos }}</td>
+                    <td>{{ item.pendentes }}</td>
+                    <td>{{ item.resolvidos }}</td>
+                    <td>{{ item.fechados }}</td>
+                    <td>{{ item.backlog }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8">Nenhum colaborador encontrado</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% endblock %}
