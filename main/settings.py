@@ -139,23 +139,7 @@ LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "login"
 
-# =========================
-# CONFIGURAÇÃO LDAP / AD
-# =========================
 
-#LDAP_SERVER_URI = "ldap://192.168.11.252"
-#LDAP_DOMAIN = "PAULISTA"
-#LDAP_DOMAIN_FQDN = "paulista.local"
-#LDAP_SEARCH_BASE = "DC=paulista,DC=local"
-#LDAP_USER_FILTER = "sAMAccountName"
-#
-#LDAP_ATTRIBUTES = [
-#    "sAMAccountName",
-#    "givenName",
-#    "sn",
-#    "mail",
-#    "displayName",
-#]
 
 GLPI_API_URL = str(os.getenv('GLPI_API_URL'))
 GLPI_APP_TOKEN = str(os.getenv('GLPI_APP_TOKEN'))
