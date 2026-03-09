@@ -1,100 +1,41 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Sistema{% endblock %}</title>
-
-    <link rel="stylesheet" href="{% static 'css/painel.css' %}">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'frontend/assets/app.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    {% block extra_css %}{% endblock %}
 </head>
+<body data-page="{% block page_key %}{% endblock %}">
+    <div id="react-root"></div>
 
-<body>
+    <script id="layout-data" type="application/json">
+    {
+        "glpiName": "{{ glpi_name|default:request.user.username|escapejs }}",
+        "glpiProfile": "{{ glpi_profile|default:'Sem perfil'|escapejs }}",
+        "glpiPicture": "{{ request.session.glpi_picture|default:''|escapejs }}",
+        "currentPage": "{% block current_page %}{% endblock %}",
+        "permissions": {
+            "canDesempenho": {% if request.session.glpi_profile == 'Technician' or request.session.glpi_profile == 'Supervisor' or request.session.glpi_profile == 'Super-Admin' %}true{% else %}false{% endif %},
+            "canColaboradores": {% if request.session.glpi_profile == 'Supervisor' or request.session.glpi_profile == 'Super-Admin' %}true{% else %}false{% endif %},
+            "canRelatorios": {% if request.session.glpi_profile == 'Supervisor' or request.session.glpi_profile == 'Super-Admin' %}true{% else %}false{% endif %}
+        },
+        "urls": {
+            "home": "{% url 'home' %}",
+            "desempenho": "{% url 'desempenho' %}",
+            "colaboradores": "{% url 'colaboradores' %}",
+            "relatorios": "{% url 'relatorios' %}",
+            "logout": "{% url 'logout' %}"
+        }
+    }
+    </script>
 
-    <header class="topbar">
-        <button class="topbar-toggle" id="menuToggle" aria-label="Abrir menu">
-            <i class="fa-solid fa-bars"></i>
-        </button>
+    {% block page_data %}{% endblock %}
 
-        <div class="topbar-title-area">
-            <h1 class="topbar-title">Portal</h1>
-            <span class="topbar-subtitle">{{ glpi_profile|default:"Sem perfil" }}</span>
-        </div>
-    </header>
-
-    <div class="layout">
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-brand">
-                <div class="brand-logo">
-                    <i class="fa-solid fa-chart-column"></i>
-                </div>
-                <div class="brand-text">
-                    <strong>Portal</strong>
-                    <span>Integração GLPI</span>
-                </div>
-            </div>
-
-            <div class="sidebar-user">
-                <div class="user-avatar">
-                    <img src="{% static 'img/user.png' %}" alt="Usuário">
-                </div>
-
-                <div class="user-info">
-                    <h2>{{ glpi_name|default:request.user.username }}</h2>
-                    <p>{{ glpi_profile|default:"Sem perfil" }}</p>
-                </div>
-            </div>
-
-            <nav class="sidebar-nav">
-                <p class="nav-section-title">Navegação</p>
-
-                <a href="{% url 'home' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
-                    <i class="fa-solid fa-house"></i>
-                    <span>Home</span>
-                </a>
-
-                {% if request.session.glpi_profile == 'Technician' or request.session.glpi_profile == 'Supervisor' or request.session.glpi_profile == 'Super-Admin' %}
-                <a href="{% url 'desempenho' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'desempenho' %}active{% endif %}">
-                    <i class="fa-solid fa-chart-line"></i>
-                    <span>Desempenho</span>
-                </a>
-                {% endif %}
-                {% if request.session.glpi_profile == 'Supervisor' or request.session.glpi_profile == 'Super-Admin' %}
-                <a href="{% url 'colaboradores' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'colaboradores' %}active{% endif %}">
-                    <i class="fa-solid fa-users"></i>
-                    <span>Colaboradores</span>
-                </a>
-                <a href="{% url 'relatorios' %}"
-                    class="nav-link {% if request.resolver_match.url_name == 'relatorios' %}active{% endif %}">
-                    <i class="fa-solid fa-file-lines"></i>
-                    <span>Relatórios</span>
-                </a>
-                {% endif %}
-            </nav>
-
-            <div class="sidebar-footer">
-                <a href="{% url 'logout' %}" class="nav-link nav-link-logout">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    <span>Sair</span>
-                </a>
-            </div>
-        </aside>
-
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-        <main class="main-content">
-            <div class="page-container">
-                {% block content %}{% endblock %}
-            </div>
-        </main>
-    </div>
-
-    <script src="{% static 'js/painel.js' %}"></script>
+    <script type="module" src="{% static 'frontend/assets/app.js' %}" defer></script>
+    {% block extra_js %}{% endblock %}
 </body>
-
 </html>

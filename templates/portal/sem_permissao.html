@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 
 {% block title %}Acesso restrito{% endblock %}
+{% block page_key %}sem_permissao{% endblock %}
+{% block current_page %}desempenho{% endblock %}
 
-{% block content %}
-<section class="content-card">
-    <h2>Acesso restrito</h2>
-    <p>{{ motivo_bloqueio }}</p>
-</section>
+{% block page_data %}
+<script id="page-data" type="application/json">
+{
+    "motivoBloqueio": "{{ motivo_bloqueio|default:'Acesso restrito.'|escapejs }}"
+}
+</script>
 {% endblock %}

@@ -5,56 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/app.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body>
+<body data-page="login">
+    <div id="react-login-root"></div>
 
-<div class="login-container">
-    <div class="login-box">
+    <script id="login-data" type="application/json">
+    {
+        "csrfToken": "{{ csrf_token }}",
+        "usernameValue": "{{ form.username.value|default:''|escapejs }}",
+        "passwordValue": "{{ form.password.value|default:''|escapejs }}",
+        "usernameError": "{% if form.username.errors %}{{ form.username.errors.0|escapejs }}{% endif %}",
+        "passwordError": "{% if form.password.errors %}{{ form.password.errors.0|escapejs }}{% endif %}",
+        "messages": [
+            {% if messages %}
+                {% for message in messages %}
+                    "{{ message|escapejs }}"{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            {% endif %}
+        ]
+    }
+    </script>
 
-        <div class="login-header">
-            <h1>Sistema</h1>
-            <p>Acesse com seu usuário do GLPI</p>
-        </div>
-
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert-error">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-
-        <form method="POST" novalidate>
-            {% csrf_token %}
-
-            <div class="input-group">
-                <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
-                {{ form.username }}
-                {% if form.username.errors %}
-                    <div class="field-error">{{ form.username.errors.0 }}</div>
-                {% endif %}
-            </div>
-
-            <div class="input-group">
-                <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
-                <div class="password-wrapper">
-                    {{ form.password }}
-                    <button type="button" class="toggle-password" id="togglePassword">Mostrar</button>
-                </div>
-                {% if form.password.errors %}
-                    <div class="field-error">{{ form.password.errors.0 }}</div>
-                {% endif %}
-            </div>
-
-            <button type="submit" class="btn-login">
-                Entrar
-            </button>
-        </form>
-
-    </div>
-</div>
-
-<script src="{% static 'js/login.js' %}"></script>
+    <script type="module" src="{% static 'frontend/assets/app.js' %}" defer></script>
 </body>
 </html>

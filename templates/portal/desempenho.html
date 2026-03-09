@@ -1,271 +1,45 @@
 {% extends 'base.html' %}
 
 {% block title %}Desempenho{% endblock %}
-
-{% block content %}
-
-<section class="content-card">
-
-    <div class="page-header-flex">
-
-        <div>
-            <h2>Dashboard de Desempenho - {{ selected_year }}</h2>
-
-            <p>
-                Capturados = chamados abertos no ano selecionado.<br>
-                Resolvidos = chamados solucionados/fechados no ano selecionado.
-            </p>
-        </div>
-
-        <form method="get" class="year-filter-form">
-
-            <label for="ano">Ano</label>
-
-            <select name="ano" id="ano" onchange="this.form.submit()">
-
-                {% for ano in available_years %}
-                <option value="{{ ano }}" {% if ano == selected_year %}selected{% endif %}>
-                    {{ ano }}
-                </option>
-                {% endfor %}
-
-            </select>
-
-        </form>
-
-    </div>
-
-</section>
-
-
-<section class="info-grid" style="margin-top:20px">
-
-    <div class="info-card">
-        <h3>Total Capturado</h3>
-        <p class="metric-number">{{ total_captured_year }}</p>
-    </div>
-
-    <div class="info-card">
-        <h3>Total Resolvido</h3>
-        <p class="metric-number">{{ total_resolved_year }}</p>
-    </div>
-
-    <div class="info-card">
-        <h3>Backlog Atual</h3>
-        <p class="metric-number">{{ current_backlog }}</p>
-    </div>
-
-</section>
-
-
-<section class="content-card" style="margin-top:24px">
-
-    <h2>Abertos x Resolvidos + Backlog</h2>
-
-    <canvas id="serviceDeskChart" height="110"></canvas>
-
-</section>
-
-
-<section class="content-card" style="margin-top:24px">
-
-    <h2>Taxa de Resolução</h2>
-
-    <canvas id="resolutionRateChart" height="90"></canvas>
-
-</section>
-
-
-<section class="content-card" style="margin-top:24px">
-
-    <h2>Histórico mensal</h2>
-
-    <div class="table-responsive">
-
-        <table class="performance-table">
-
-            <thead>
-                <tr>
-                    <th>Mês</th>
-                    <th>Capturados</th>
-                    <th>Resolvidos</th>
-                    <th>Backlog</th>
-                    <th>Taxa de Resolução</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-                {% for item in history_rows %}
-
-                <tr>
-                    <td>{{ item.mes }}</td>
-                    <td>{{ item.capturados }}</td>
-                    <td>{{ item.resolvidos }}</td>
-                    <td>{{ item.backlog }}</td>
-                    <td>{{ item.taxa_resolucao }}%</td>
-                </tr>
-
-                {% empty %}
-
-                <tr>
-                    <td colspan="5">Nenhum dado encontrado para o período.</td>
-                </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-</section>
-
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-{{ chart_labels|json_script:"chart-labels" }}
-{{ chart_captured|json_script:"chart-captured" }}
-{{ chart_resolved|json_script:"chart-resolved" }}
-{{ chart_backlog|json_script:"chart-backlog" }}
-{{ chart_resolution_rate|json_script:"chart-resolution-rate" }}
-
-<script>
-
-const labels = JSON.parse(document.getElementById("chart-labels").textContent);
-const captured = JSON.parse(document.getElementById("chart-captured").textContent);
-const resolved = JSON.parse(document.getElementById("chart-resolved").textContent);
-const backlog = JSON.parse(document.getElementById("chart-backlog").textContent);
-const resolutionRate = JSON.parse(document.getElementById("chart-resolution-rate").textContent);
-
-
-
-const ctx1 = document.getElementById("serviceDeskChart");
-
-new Chart(ctx1, {
-
-    type: "bar",
-
-    data: {
-
-        labels: labels,
-
-        datasets: [
-
-            {
-                label: "Capturados",
-                data: captured,
-                backgroundColor: "rgba(54,162,235,0.6)"
-            },
-
-            {
-                label: "Resolvidos",
-                data: resolved,
-                backgroundColor: "rgba(34,197,94,0.6)"
-            },
-
-            {
-                label: "Backlog",
-                data: backlog,
-                type: "line",
-                borderColor: "rgba(239,68,68,1)",
-                backgroundColor: "rgba(239,68,68,0.1)",
-                borderWidth: 3,
-                tension: 0.3,
-                yAxisID: "y1"
-            }
-
-        ]
-    },
-
-    options: {
-
-        responsive: true,
-
-        interaction: {
-            mode: "index",
-            intersect: false
-        },
-
-        scales: {
-
-            y: {
-                beginAtZero: true,
-                title: {
-                    display: true,
-                    text: "Tickets"
-                }
-            },
-
-            y1: {
-                position: "right",
-                beginAtZero: true,
-                grid: {
-                    drawOnChartArea: false
-                },
-                title: {
-                    display: true,
-                    text: "Backlog"
-                }
-            }
-
-        }
-
-    }
-
-});
-
-
-
-const ctx2 = document.getElementById("resolutionRateChart");
-
-new Chart(ctx2, {
-
-    type: "line",
-
-    data: {
-
-        labels: labels,
-
-        datasets: [
-
-            {
-                label: "Taxa de Resolução (%)",
-                data: resolutionRate,
-                borderColor: "rgba(139,92,246,1)",
-                backgroundColor: "rgba(139,92,246,0.2)",
-                borderWidth: 3,
-                tension: 0.3,
-                fill: true
-            }
-
-        ]
-
-    },
-
-    options: {
-
-        responsive: true,
-
-        scales: {
-
-            y: {
-                beginAtZero: true,
-                max: 100,
-                ticks: {
-                    callback: function(value){
-                        return value + "%"
-                    }
-                }
-            }
-
-        }
-
-    }
-
-});
-
+{% block page_key %}desempenho{% endblock %}
+{% block current_page %}desempenho{% endblock %}
+
+{% block page_data %}
+<script id="page-data" type="application/json">
+{
+    "selectedYear": {{ selected_year|default:0 }},
+    "availableYears": [
+        {% for ano in available_years %}{{ ano }}{% if not forloop.last %},{% endif %}{% endfor %}
+    ],
+    "totalCapturedYear": {{ total_captured_year|default:0 }},
+    "totalResolvedYear": {{ total_resolved_year|default:0 }},
+    "currentBacklog": {{ current_backlog|default:0 }},
+    "chartLabels": [
+        {% for label in chart_labels %}"{{ label|escapejs }}"{% if not forloop.last %},{% endif %}{% endfor %}
+    ],
+    "chartCaptured": [
+        {% for value in chart_captured %}{{ value|default:0 }}{% if not forloop.last %},{% endif %}{% endfor %}
+    ],
+    "chartResolved": [
+        {% for value in chart_resolved %}{{ value|default:0 }}{% if not forloop.last %},{% endif %}{% endfor %}
+    ],
+    "chartBacklog": [
+        {% for value in chart_backlog %}{{ value|default:0 }}{% if not forloop.last %},{% endif %}{% endfor %}
+    ],
+    "chartResolutionRate": [
+        {% for value in chart_resolution_rate %}{{ value|default:0 }}{% if not forloop.last %},{% endif %}{% endfor %}
+    ],
+    "historyRows": [
+        {% for item in history_rows %}
+        {
+            "mes": "{{ item.mes|escapejs }}",
+            "capturados": {{ item.capturados|default:0 }},
+            "resolvidos": {{ item.resolvidos|default:0 }},
+            "backlog": {{ item.backlog|default:0 }},
+            "taxaResolucao": {{ item.taxa_resolucao|default:0 }}
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
 </script>
-
 {% endblock %}

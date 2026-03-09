@@ -1,27 +1,15 @@
 {% extends 'base.html' %}
 
 {% block title %}Home{% endblock %}
+{% block page_key %}home{% endblock %}
+{% block current_page %}home{% endblock %}
 
-{% block content %}
-<section class="content-card">
-    <h2>Bem-vindo ao sistema</h2>
-    <p>Esta é a tela inicial.</p>
-</section>
-
-<section class="info-grid">
-    <div class="info-card">
-        <h3>Usuário</h3>
-        <p>{{ glpi_name }}</p>
-    </div>
-
-    <div class="info-card">
-        <h3>Perfil GLPI</h3>
-        <p>{{ glpi_profile }}</p>
-    </div>
-
-    <div class="info-card">
-        <h3>Login</h3>
-        <p>{{ request.user.username }}</p>
-    </div>
-</section>
+{% block page_data %}
+<script id="page-data" type="application/json">
+{
+    "glpiName": "{{ glpi_name|escapejs }}",
+    "glpiProfile": "{{ glpi_profile|escapejs }}",
+    "username": "{{ request.user.username|escapejs }}"
+}
+</script>
 {% endblock %}
