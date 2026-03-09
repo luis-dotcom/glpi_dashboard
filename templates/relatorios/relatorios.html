@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Relatórios{% endblock %}
+
+{% block content %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/relatorios.css' %}">
+{% endblock %}
+<div class="relatorios-container">
+    <div class="relatorios-page-header">
+        <h1>Relatórios de Chamados</h1>
+        <p>Consulta consolidada por período, técnico, grupo, localização e categoria.</p>
+    </div>
+
+    {% if pdf_unavailable %}
+    <div class="relatorios-card">
+        <div class="relatorios-alert">
+            A exportação em PDF precisa da biblioteca <strong>xhtml2pdf</strong>.
+            Instale com: <code>pip install xhtml2pdf</code>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="relatorios-card">
+        <div class="relatorios-card-title">Filtros</div>
+
+        <form method="GET" id="relatoriosForm">
+            <div class="relatorios-filters-grid">
+                <div class="relatorios-form-group">
+                    <label for="data_inicio">Data inicial</label>
+                    <input type="date" id="data_inicio" name="data_inicio" value="{{ request.GET.data_inicio }}">
+                </div>
+
+                <div class="relatorios-form-group">
+                    <label for="data_fim">Data final</label>
+                    <input type="date" id="data_fim" name="data_fim" value="{{ request.GET.data_fim }}">
+                </div>
+
+                <div class="relatorios-form-group">
+                    <label for="tecnico">Técnico</label>
+                    <select id="tecnico" name="tecnico">
+                        <option value="">Todos</option>
+                        {% for tecnico in tecnicos %}
+                            <option value="{{ tecnico.id }}" {% if request.GET.tecnico == tecnico.id|stringformat:"s" %}selected{% endif %}>
+                                {{ tecnico.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="relatorios-form-group">
+                    <label for="grupo">Grupo</label>
+                    <select id="grupo" name="grupo">
+                        <option value="">Todos</option>
+                        {% for grupo in grupos %}
+                            <option value="{{ grupo.id }}" {% if request.GET.grupo == grupo.id|stringformat:"s" %}selected{% endif %}>
+                                {{ grupo.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="relatorios-form-group">
+                    <label for="localizacao">Localização</label>
+                    <select id="localizacao" name="localizacao">
+                        <option value="">Todas</option>
+                        {% for localizacao in localizacoes %}
+                            <option value="{{ localizacao.id }}" {% if request.GET.localizacao == localizacao.id|stringformat:"s" %}selected{% endif %}>
+                                {{ localizacao.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="relatorios-form-group">
+                    <label for="categoria">Categoria</label>
+                    <select id="categoria" name="categoria">
+                        <option value="">Todas</option>
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria.id }}" {% if request.GET.categoria == categoria.id|stringformat:"s" %}selected{% endif %}>
+                                {{ categoria.completename|default:categoria.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="relatorios-actions no-print">
+                <button type="submit" class="relatorios-btn relatorios-btn-primary">Pesquisar</button>
+                <a href="{% url 'relatorios' %}" class="relatorios-btn relatorios-btn-secondary">Limpar filtros</a>
+                <a href="?{{ request.GET.urlencode }}&export=pdf" class="relatorios-btn relatorios-btn-danger">Exportar PDF</a>
+                <a href="?{{ request.GET.urlencode }}&export=excel" class="relatorios-btn relatorios-btn-success">Exportar Excel</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="relatorios-summary-cards">
+        <div class="relatorios-summary-box">
+            <h3>Total de chamados</h3>
+            <div class="value">{{ total_chamados|default:"0" }}</div>
+        </div>
+
+        <div class="relatorios-summary-box">
+            <h3>Chamados fechados</h3>
+            <div class="value">{{ chamados_fechados|default:"0" }}</div>
+        </div>
+
+        <div class="relatorios-summary-box">
+            <h3>Chamados abertos</h3>
+            <div class="value">{{ chamados_abertos|default:"0" }}</div>
+        </div>
+
+        <div class="relatorios-summary-box">
+            <h3>Técnicos envolvidos</h3>
+            <div class="value">{{ total_tecnicos|default:"0" }}</div>
+        </div>
+
+        <div class="relatorios-summary-box">
+            <h3>Grupos filtrados</h3>
+            <div class="value">{{ total_grupos|default:"0" }}</div>
+        </div>
+    </div>
+
+    <div class="relatorios-card">
+        <div class="relatorios-card-title">Resultado do relatório</div>
+
+        <div class="relatorios-table-responsive">
+            <table class="relatorios-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Técnico</th>
+                        <th>Grupo</th>
+                        <th>Localização</th>
+                        <th>Categoria</th>
+                        <th>Status</th>
+                        <th>Data abertura</th>
+                        <th>Data fechamento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if chamados %}
+                        {% for chamado in chamados %}
+                            <tr>
+                                <td>{{ chamado.id }}</td>
+                                <td>{{ chamado.titulo }}</td>
+                                <td>{{ chamado.tecnico }}</td>
+                                <td>{{ chamado.grupo }}</td>
+                                <td>{{ chamado.localizacao }}</td>
+                                <td>{{ chamado.categoria }}</td>
+                                <td>
+                                    {% if chamado.status == 'Fechado' %}
+                                        <span class="relatorios-badge relatorios-badge-closed">{{ chamado.status }}</span>
+                                    {% elif chamado.status == 'Pendente' %}
+                                        <span class="relatorios-badge relatorios-badge-pending">{{ chamado.status }}</span>
+                                    {% else %}
+                                        <span class="relatorios-badge relatorios-badge-open">{{ chamado.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ chamado.data_abertura }}</td>
+                                <td>{{ chamado.data_fechamento|default:"-" }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="9" class="relatorios-empty-state">
+                                Nenhum chamado encontrado para os filtros informados.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="relatorios-footer-note">
+            Para garantir exportação em PDF e Excel sem quebra de formatação, o ideal é gerar esses arquivos no backend mantendo a mesma estrutura de colunas.
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block extra_js %}
+<script src="{% static 'js/relatorios.js' %}"></script>
+{% endblock %}

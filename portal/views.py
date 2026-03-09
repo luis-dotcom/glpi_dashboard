@@ -377,7 +377,7 @@ def glpi_list_users(session_token):
 
     print("Total de usuários retornados:", len(all_users))
     return all_users
-
+    
 
 def glpi_search_tickets_for_user(session_token, user_id):
     url = f"{settings.GLPI_API_URL}/search/Ticket"
