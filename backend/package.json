@@ -1,0 +1,9 @@
+{
+  "name": "glpi-backend",
+  "version": "1.0.0",
+  "description": "Backend Django - Portal GLPI",
+  "scripts": {
+    "start": "python manage.py runserver",
+    "start:ws": "python -m daphne -b 127.0.0.1 -p 8000 main.asgi:application"
+  }
+}

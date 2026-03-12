@@ -1,42 +1,14 @@
 <!doctype html>
-<html lang="pt-br">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GLPI Dashboard Frontend</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    />
+    <title>Portal - Integração GLPI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   </head>
-  <body data-page="home">
-    <div id="react-root"></div>
-    <script id="layout-data" type="application/json">
-      {
-        "glpiName": "Usuario Demo",
-        "glpiProfile": "Supervisor",
-        "currentPage": "home",
-        "permissions": {
-          "canDesempenho": true,
-          "canColaboradores": true,
-          "canRelatorios": true
-        },
-        "urls": {
-          "home": "/home/",
-          "desempenho": "/portal/desempenho/",
-          "colaboradores": "/portal/colaboradores/",
-          "relatorios": "/relatorios/",
-          "logout": "/logout/"
-        }
-      }
-    </script>
-    <script id="page-data" type="application/json">
-      {
-        "glpiName": "Usuario Demo",
-        "glpiProfile": "Supervisor",
-        "username": "usuario.demo"
-      }
-    </script>
+  <body>
+    <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

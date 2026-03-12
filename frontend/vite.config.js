@@ -1,24 +1,20 @@
-import path from "node:path";
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "/static/frontend/",
-  build: {
-    outDir: path.resolve(__dirname, "../main/static/frontend"),
-    emptyOutDir: true,
-    cssCodeSplit: false,
-    rollupOptions: {
-      input: path.resolve(__dirname, "src/main.jsx"),
-      output: {
-        entryFileNames: "assets/app.js",
-        chunkFileNames: "assets/[name].js",
-        assetFileNames: (assetInfo) =>
-          assetInfo.name && assetInfo.name.endsWith(".css")
-            ? "assets/app.css"
-            : "assets/[name][extname]",
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+        timeout: 300000, // 5 min - Colaboradores faz muitas chamadas ao GLPI
+      },
+      '/ws': {
+        target: 'ws://127.0.0.1:8000',
+        ws: true,
       },
     },
   },
-});
+})

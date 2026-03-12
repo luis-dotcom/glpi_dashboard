@@ -1,0 +1,276 @@
+/* Páginas - estilos compartilhados */
+.content-card,
+.info-card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+.content-card {
+  padding: 28px;
+  margin-bottom: 24px;
+}
+
+.content-card h2 {
+  color: var(--title);
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.content-card h3 {
+  color: var(--title);
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.content-card p {
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-bottom: 24px;
+}
+
+.info-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.info-card {
+  padding: 24px;
+}
+
+.info-card h3 {
+  color: var(--title);
+  margin-bottom: 12px;
+  font-size: 17px;
+}
+
+.info-card p {
+  font-size: 16px;
+  color: #374151;
+}
+
+.metric-number {
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--title);
+  margin-top: 8px;
+}
+
+.alert-error {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.performance-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.performance-table th,
+.performance-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.performance-table th {
+  background: #f8fafc;
+  color: var(--title);
+  font-weight: 700;
+}
+
+.performance-table tr:hover {
+  background: #f9fbff;
+}
+
+.page-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.page-header-flex h2 {
+  color: var(--title);
+  font-size: 24px;
+}
+
+.year-filter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 150px;
+}
+
+.year-filter-form label {
+  font-weight: 600;
+  color: var(--title);
+}
+
+.year-filter-form select {
+  height: 42px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 0 10px;
+  background: #fff;
+}
+
+.period-filter-form {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: end;
+}
+
+.period-filter-form div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.period-filter-form label {
+  font-weight: 600;
+  color: var(--title);
+}
+
+.period-filter-form input,
+.period-filter-form button {
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+}
+
+.period-filter-form button {
+  background: #0b5ed7;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.export-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-export {
+  padding: 10px 20px;
+  background: #0b5ed7;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-export:hover {
+  background: #084298;
+}
+
+.filter-section {
+  margin-bottom: 24px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-item label {
+  font-weight: 600;
+  color: var(--title);
+  font-size: 14px;
+}
+
+.filter-item input,
+.filter-item select {
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.pagination-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pagination-buttons button {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.pagination-buttons button:hover:not(:disabled) {
+  background: #f3f4f6;
+  border-color: #0b5ed7;
+}
+
+.pagination-buttons button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-buttons button.active {
+  background: #0b5ed7;
+  color: #fff;
+  border-color: #0b5ed7;
+}
+
+@media (max-width: 1024px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}

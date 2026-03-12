@@ -1,13 +1,10 @@
-import "./dashboard.css";
-import "./login.css";
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
 
-import { mountDashboardApp } from "./dashboardApp";
-import { mountLoginApp } from "./loginApp";
-
-const page = document.body.getAttribute("data-page") || "";
-
-if (page === "login") {
-  mountLoginApp();
-} else {
-  mountDashboardApp();
-}
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)

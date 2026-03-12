@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --sidebar-bg: #0b5ed7;
+  --sidebar-bg-dark: #084298;
+  --sidebar-hover: rgba(255, 255, 255, 0.14);
+  --sidebar-active: rgba(255, 255, 255, 0.22);
+  --text-light: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.78);
+  --page-bg: #f3f6fb;
+  --card-bg: #ffffff;
+  --title: #0b5ed7;
+  --text: #1f2937;
+  --border: #e5e7eb;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+html, body {
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--page-bg);
+  color: var(--text);
+}
+
+body {
+  overflow: hidden;
+}
+
+#root {
+  height: 100%;
+}
